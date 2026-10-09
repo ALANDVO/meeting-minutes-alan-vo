@@ -13,3 +13,11 @@ build/
 .DS_Store
 frontend/node_modules/
 frontend/dist/
+data/
+*.db
+*.db-shm
+*.db-wal
+coverage/
+playwright-report/
+test-results/
+.portfolio-*

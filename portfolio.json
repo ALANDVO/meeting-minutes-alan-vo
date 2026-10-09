@@ -1,0 +1,15 @@
+{
+  "name": "meeting-minutes-alan-vo",
+  "owner": "ALANDVO",
+  "author": "Alan Vo",
+  "email": "alanvo@gmail.com",
+  "version": "1.0.0",
+  "domain": "nlp",
+  "workflows": [
+    "Import and inspect source-linked meeting proposals",
+    "Correct and independently approve minutes",
+    "Track action status and export immutable approved snapshots"
+  ],
+  "description": "Grounded meeting minutes with review, action tracking and optional model suggestions",
+  "summary": "Source-backed meeting minutes, independent approval and action tracking with optional grounded model suggestions"
+}
