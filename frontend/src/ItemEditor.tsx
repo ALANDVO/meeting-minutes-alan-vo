@@ -1,0 +1,16 @@
+import {useState} from 'react'
+import type {Meeting,Item,Mutation} from './types'
+export function ItemEditor({meeting,item,mutate,onClose,busy}:{meeting:Meeting;item?:Item;mutate:Mutation;onClose:()=>void;busy:boolean}){
+ const initial=item?.evidence[0]??{turn_id:meeting.document.turns[0].id,quote:meeting.document.turns[0].text}
+ const [kind,setKind]=useState<Item['kind']>(item?.kind??'action');const [status,setStatus]=useState(item?.status??'open');const [text,setText]=useState(item?.text??'');const [owner,setOwner]=useState(item?.owner??'');const [due,setDue]=useState(item?.due_date??'');const [note,setNote]=useState(item?.note??'');const [turn,setTurn]=useState(initial.turn_id);const [quote,setQuote]=useState(initial.quote)
+ async function save(){const saved=await mutate(item?'/items/'+item.id:'/items',{item:{kind,text,owner:kind==='action'?(owner||null):null,due_date:kind==='action'?(due||null):null,status,evidence:[{turn_id:turn,quote}],note}},item?'PUT':'POST');if(saved)onClose()}
+ return <section className="panel editor"><h2>{item?'Edit item':'Add sourced item'}</h2><form onSubmit={e=>{e.preventDefault();void save().catch(()=>{/* Parent retains the error and the unsaved form. */})}}>
+ <label>Kind<select aria-label="Kind" disabled={!!item} value={kind} onChange={e=>{setKind(e.target.value as Item['kind']);setStatus(e.target.value==='decision'?'recorded':'open')}}><option>action</option><option>decision</option><option>question</option></select></label>
+ <label>Item status<select aria-label="Item status" value={status} onChange={e=>setStatus(e.target.value)}>{(kind==='action'?['open','in_progress','blocked','done','cancelled']:kind==='decision'?['recorded','superseded']:['open','resolved']).map(s=><option key={s} value={s}>{s.replaceAll('_',' ')}</option>)}</select></label>
+ <label>Item text<textarea required maxLength={4000} rows={3} value={text} onChange={e=>setText(e.target.value)}/></label>
+ {kind==='action'&&<div className="form-grid"><label>Owner<select aria-label="Owner" value={owner} onChange={e=>setOwner(e.target.value)}><option value="">Unassigned</option>{meeting.participants.map(p=><option key={p}>{p}</option>)}</select></label><label>Confirmed deadline<input type="date" value={due} onChange={e=>setDue(e.target.value)}/></label></div>}
+ <label>Source turn<select aria-label="Source turn" value={turn} onChange={e=>{setTurn(e.target.value);setQuote(meeting.document.turns.find(t=>t.id===e.target.value)!.text)}}>{meeting.document.turns.map(t=><option key={t.id} value={t.id}>{t.id} · {t.speaker??t.raw_speaker??'Unlabeled'} · {t.text.slice(0,70)}</option>)}</select></label>
+ <label>Exact source quote<textarea required rows={3} value={quote} onChange={e=>setQuote(e.target.value)} maxLength={4000}/></label><p className="muted">The server verifies this quote against the stored transcript. Item wording can be corrected by a person; the original citation remains visible.</p>
+ <label>Review note<textarea rows={2} maxLength={2000} value={note} onChange={e=>setNote(e.target.value)}/></label>
+ <div className="actions"><button disabled={busy}>Save item</button><button type="button" className="secondary" onClick={onClose}>Cancel</button></div></form></section>
+}

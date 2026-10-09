@@ -1,0 +1,4 @@
+[00:01] Alex: I will write the rollback checklist by tomorrow.
+[00:12] Sam: Decision: keep the current API version until the migration tests pass.
+[00:25] Alex: ACTION: Sam will review the dashboard by Monday.
+[00:42] Sam: Question: Who approves the retention policy?

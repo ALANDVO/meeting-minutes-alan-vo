@@ -1,26 +1,7 @@
-# Contributing to meeting-minutes-alan-vo
+# Contributing to Meeting Minutes
 
-## Setup
-```bash
-git clone https://github.com/ALANDVO/meeting-minutes-alan-vo.git
-cd meeting-minutes-alan-vo
-pip install -r requirements.txt
-cp .env.example .env
-```
+Use Python 3.11+ and Node 22+. Follow README local setup and run the backend tests, extraction diagnostic, frontend build and frontend tests before submitting a PR. Keep transcript fixtures synthetic and model requests mocked. Never commit credentials, real meeting transcripts, databases or generated dependencies.
 
-## Code Style
-- Python 3.10+, type hints, docstrings
-- TypeScript strict mode for frontend
-- No hardcoded secrets
+Changes to citation offsets, date rules, approvals or exports need behavior tests, including invalid inputs and failure paths. Preserve optimistic revision checks and independent reviewer separation. OIDC changes need signed-token and browser-state tests. Describe user-visible changes and validation in the PR; preserve existing attribution and the MIT license.
 
-## Submitting Changes
-1. Fork → feature branch → test → PR
-2. Include: what changed, why, how to test
-
-## Issues
-- Steps to reproduce
-- Expected vs actual
-- Log output (redact keys)
-
----
-**Alan Vo** | alanvo@gmail.com | [GitHub](https://github.com/ALANDVO)
+Alan Vo — alanvo@gmail.com

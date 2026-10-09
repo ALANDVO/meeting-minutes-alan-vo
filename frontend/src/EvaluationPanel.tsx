@@ -1,0 +1,8 @@
+import {useState} from 'react'
+import {api,errorMessage} from './api'
+import type {Evaluation} from './types'
+export function EvaluationPanel(){
+ const [result,setResult]=useState<Evaluation|null>(null);const [error,setError]=useState('');const [busy,setBusy]=useState(false)
+ async function run(){setBusy(true);setError('');try{setResult(await api<Evaluation>('/evaluation'))}catch(e){setError(errorMessage(e))}finally{setBusy(false)}}
+ return <section className="panel"><p className="eyebrow">AI/ML EVALUATION</p><h2>Measure the extraction rules</h2><p>Run a reproducible diagnostic on 24 manually labeled English snippets, including cases the rules deliberately cannot resolve. No model API or transcript upload is involved.</p><button onClick={()=>void run()} disabled={busy}>{busy?'Evaluating…':'Run diagnostic'}</button>{error&&<p className="error" role="alert">{error}</p>}{result&&<><div className="metrics"><div><strong>{(result.precision*100).toFixed(1)}%</strong><span>Precision</span></div><div><strong>{(result.recall*100).toFixed(1)}%</strong><span>Recall</span></div><div><strong>{result.false_positive}</strong><span>False positives</span></div><div><strong>{result.false_negative}</strong><span>Missed candidates</span></div></div><ul>{result.limitations.map(l=><li key={l}>{l}</li>)}</ul><div className="table-scroll"><table><thead><tr><th>Case</th><th>Expected</th><th>Predicted</th><th>Transcript</th></tr></thead><tbody>{result.rows.map(r=><tr key={r.case} className={r.correct?'':'mismatch'}><td>{r.case}</td><td>{r.expected}</td><td>{r.predicted}</td><td>{r.transcript}</td></tr>)}</tbody></table></div></>}</section>
+}
