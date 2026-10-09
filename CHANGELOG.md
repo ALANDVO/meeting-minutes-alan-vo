@@ -1,5 +1,7 @@
 # Changelog
 
+## [1.0.0] - 2026-10-09
+
 ## 1.0.0
 
 - Replace the CLI-only baseline with an authenticated full-stack meeting-record workspace.

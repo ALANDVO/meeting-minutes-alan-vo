@@ -1,5 +1,7 @@
 # Meeting Minutes — Alan Vo
 
+Current version: `1.0.0`.
+
 A meeting-record workspace with **source-linked extraction, independent approval and action tracking**. Import an English text transcript, review proposed actions and decisions against exact quotes, then preserve approved minutes while tracking follow-through.
 
 This release replaces the original CLI-only implementation with a FastAPI backend, React/TypeScript frontend, persistent SQLite storage and OIDC sign-in. The CLI remains available for offline extraction. It accepts **text transcripts, not audio**.
