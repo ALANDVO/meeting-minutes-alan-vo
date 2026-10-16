@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "meeting-minutes-alan-vo"
-version = "1.0.0"
+version = "1.1.0"
 description = "Source-backed meeting minutes, independent review and action tracking"
 requires-python = ">=3.11"
 authors = [{name = "Alan Vo", email = "alanvo@gmail.com"}]

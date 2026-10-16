@@ -1,5 +1,17 @@
 # Changelog
 
+## 1.1.0 — work-in-progress checkpoint
+
+Partial code published for continued development. Known issues: STATUS.md.
+
+## [1.1.0] - 2026-10-16
+
+## 1.1.0
+
+- Add action status filter in the Minutes Panel to focus follow-through review on open, in-progress, blocked, done or cancelled actions.
+- Decisions and questions are always shown; the filter only affects action items.
+- Filter state resets when switching meetings for a clean context.
+
 ## [1.0.0] - 2026-10-09
 
 ## 1.0.0
