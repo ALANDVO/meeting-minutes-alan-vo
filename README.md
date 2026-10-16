@@ -1,5 +1,8 @@
 # Meeting Minutes — Alan Vo
 
+> Work in progress. This checkpoint may be incomplete or fail tests. See PLAN.md and STATUS.md before use.
+
+
 Current version: `1.0.0`.
 
 A meeting-record workspace with **source-linked extraction, independent approval and action tracking**. Import an English text transcript, review proposed actions and decisions against exact quotes, then preserve approved minutes while tracking follow-through.
