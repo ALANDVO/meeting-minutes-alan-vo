@@ -1,3 +1,4 @@
+
 import {useState, useEffect} from 'react'
 import type {Meeting,Item,Mutation,User} from './types'
 import {ItemEditor} from './ItemEditor'
@@ -7,6 +8,14 @@ export function MinutesPanel({meeting,mutate,busy,user,onSource}:{meeting:Meetin
  const [actionFilter,setActionFilter]=useState<'all'|'open'|'in_progress'|'blocked'|'done'|'cancelled'>('all')
  useEffect(()=>{setActionFilter('all')},[meeting.id])
  const canEdit=user.roles.some(r=>['admin','reviewer'].includes(r));const draft=meeting.status==='draft';const independent=!meeting.contributors.includes(user.subject)
+ const actionStatusCounts = {
+   all: meeting.items.filter(i => i.kind === 'action').length,
+   open: meeting.items.filter(i => i.kind === 'action' && i.status === 'open').length,
+   in_progress: meeting.items.filter(i => i.kind === 'action' && i.status === 'in_progress').length,
+   blocked: meeting.items.filter(i => i.kind === 'action' && i.status === 'blocked').length,
+   done: meeting.items.filter(i => i.kind === 'action' && i.status === 'done').length,
+   cancelled: meeting.items.filter(i => i.kind === 'action' && i.status === 'cancelled').length,
+ }
  async function review(decision:string){if(await mutate('/review',{decision,note}))setNote('')}
  return <>
  <section className="panel"><div className="section-heading"><div><p className="eyebrow">REVIEWED CONTENT</p><h2>Minutes & actions</h2></div><button className="secondary" disabled={!canEdit||!draft||busy} onClick={()=>setEditor('new')}>Add sourced item</button></div>
@@ -17,7 +26,7 @@ export function MinutesPanel({meeting,mutate,busy,user,onSource}:{meeting:Meetin
  {item.note&&<p className="muted">{item.note}</p>}
  {item.kind==='action'&&meeting.status==='approved'&&canEdit&&<div className="actions">{(item.status==='done'||item.status==='cancelled'?['open']:['in_progress','blocked','done','cancelled'].filter(s=>s!==item.status)).map(s=><button key={s} className="secondary" disabled={busy} onClick={()=>{setTransition({item,status:s});setNote('')}}>{s.replaceAll('_',' ')}</button>)}</div>}
  </article>)}
- <div className="filter-bar" role="group" aria-label="Filter actions by status"><label htmlFor="action-filter" className="visually-hidden">Filter actions by status</label><select id="action-filter" value={actionFilter} onChange={e=>setActionFilter(e.target.value as typeof actionFilter)} disabled={busy}><option value="all">All actions</option><option value="open">Open</option><option value="in_progress">In progress</option><option value="blocked">Blocked</option><option value="done">Done</option><option value="cancelled">Cancelled</option></select></div>
+ <div className="filter-bar" role="group" aria-label="Filter actions by status"><label htmlFor="action-filter" className="visually-hidden">Filter actions by status</label><select id="action-filter" value={actionFilter} onChange={e=>setActionFilter(e.target.value as typeof actionFilter)} disabled={busy}><option value="all">All actions ({actionStatusCounts.all})</option><option value="open">Open ({actionStatusCounts.open})</option><option value="in_progress">In progress ({actionStatusCounts.in_progress})</option><option value="blocked">Blocked ({actionStatusCounts.blocked})</option><option value="done">Done ({actionStatusCounts.done})</option><option value="cancelled">Cancelled ({actionStatusCounts.cancelled})</option></select></div>
  </section>
  {editor&&<ItemEditor key={editor==='new'?'new':editor.id} meeting={meeting} item={editor==='new'?undefined:editor} mutate={mutate} onClose={()=>setEditor(null)} busy={busy}/>}
  <section className="panel"><p className="eyebrow">APPROVAL GATE</p><h2>Confirm the record</h2>{meeting.review_findings?.map((f,n)=><p className="warning" key={n}>{f.message}</p>)}

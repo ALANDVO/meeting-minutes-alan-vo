@@ -1,1 +1,34 @@
-{"schema_version":1,"current_feature":"action-status-filter","features":[{"id":"action-status-filter","title":"Action Status Filter in Minutes Panel","status":"done","acceptance":["MinutesPanel shows a filter control for action status (all, open, in_progress, blocked, done, cancelled)","Filter applies to displayed actions only, not decisions/questions","Selected filter persists during session","Filter state resets when switching meetings","Keyboard accessible with proper ARIA labels"],"implementation":["frontend/src/MinutesPanel.tsx"],"tests":["frontend/src/workflows.test.tsx"]}]}
+
+{
+  "schema_version": 1,
+  "current_feature": "action-status-counts",
+  "features": [
+    {
+      "id": "action-status-filter",
+      "title": "Action Status Filter in Minutes Panel",
+      "status": "done",
+      "acceptance": [
+        "MinutesPanel shows a filter control for action status (all, open, in_progress, blocked, done, cancelled)",
+        "Filter applies to displayed actions only, not decisions/questions",
+        "Selected filter persists during session",
+        "Filter state resets when switching meetings",
+        "Keyboard accessible with proper ARIA labels"
+      ],
+      "implementation": ["frontend/src/MinutesPanel.tsx"],
+      "tests": ["frontend/src/workflows.test.tsx"]
+    },
+    {
+      "id": "action-status-counts",
+      "title": "Action Status Counts in Filter Dropdown",
+      "status": "done",
+      "acceptance": [
+        "Filter dropdown shows action count per status (e.g., 'Open (3)', 'In progress (1)')",
+        "Count updates when actions are added/removed/transitioned",
+        "Count only includes action items, not decisions/questions",
+        "'All actions' shows total action count"
+      ],
+      "implementation": ["frontend/src/MinutesPanel.tsx"],
+      "tests": ["frontend/src/workflows.test.tsx"]
+    }
+  ]
+}
