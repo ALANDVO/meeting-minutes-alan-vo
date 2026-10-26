@@ -4,7 +4,7 @@ Each round completes one feature or repair. Future items are planned, not implem
 
 ## Current round
 
-action-status-filter
+action-status-counts
 
 ## Roadmap
 
@@ -18,6 +18,20 @@ Acceptance:
 - Selected filter persists during session
 - Filter state resets when switching meetings
 - Keyboard accessible with proper ARIA labels
+
+Implementation: `frontend/src/MinutesPanel.tsx`
+
+Tests: `frontend/src/workflows.test.tsx`
+
+### action-status-counts — Action Status Counts in Filter Dropdown
+
+Status: done
+
+Acceptance:
+- Filter dropdown shows action count per status (e.g., 'Open (3)', 'In progress (1)')
+- Count updates when actions are added/removed/transitioned
+- Count only includes action items, not decisions/questions
+- 'All actions' shows total action count
 
 Implementation: `frontend/src/MinutesPanel.tsx`
 

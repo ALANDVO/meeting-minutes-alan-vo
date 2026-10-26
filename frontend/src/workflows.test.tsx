@@ -1,3 +1,4 @@
+
 import {render,screen,fireEvent,waitFor} from '@testing-library/react'
 import {describe,it,expect,vi,afterEach} from 'vitest'
 import {cleanup} from '@testing-library/react'
@@ -34,6 +35,27 @@ describe('review workflows',()=>{
    fireEvent.change(screen.getByRole('combobox',{name:/filter actions by status/i}),{target:{value:'in_progress'}})
    expect(screen.getByText('Review PR')).toBeInTheDocument()
    expect(screen.queryByText('Write tests')).not.toBeInTheDocument()
+   expect(screen.getByText('Use queue')).toBeInTheDocument()
+ })
+ it('shows action status counts in the filter dropdown',()=>{
+   const change=vi.fn().mockResolvedValue(true)
+   const source=vi.fn()
+   const item1:Item={id:'item-1',kind:'action',text:'Write tests',owner:'Alex',due_date:'2026-10-10',status:'open',evidence:[evidence],note:'',source:'rules'}
+   const item2:Item={id:'item-2',kind:'action',text:'Review PR',owner:'Sam',due_date:'2026-10-11',status:'in_progress',evidence:[evidence],note:'',source:'rules'}
+   const item3:Item={id:'item-3',kind:'action',text:'Deploy app',owner:'Sam',due_date:'2026-10-12',status:'done',evidence:[evidence],note:'',source:'rules'}
+   const item4:Item={id:'item-4',kind:'decision',text:'Use queue',owner:null,due_date:null,status:'resolved',evidence:[evidence],note:'',source:'rules'}
+   const meetingWithActions:Meeting={...meeting,status:'approved',items:[item1,item2,item3,item4],contributors:['author'],created_by:'author'}
+   render(<MinutesPanel meeting={meetingWithActions} mutate={change} busy={false} user={user} onSource={source}/>)
+   const combobox = screen.getByRole('combobox',{name:/filter actions by status/i})
+   expect(combobox).toBeInTheDocument()
+   // Check that option text includes counts
+   expect(screen.getByRole('option',{name:/All actions \(3\)/i})).toBeInTheDocument()
+   expect(screen.getByRole('option',{name:/Open \(1\)/i})).toBeInTheDocument()
+   expect(screen.getByRole('option',{name:/In progress \(1\)/i})).toBeInTheDocument()
+   expect(screen.getByRole('option',{name:/Done \(1\)/i})).toBeInTheDocument()
+   expect(screen.getByRole('option',{name:/Blocked \(0\)/i})).toBeInTheDocument()
+   expect(screen.getByRole('option',{name:/Cancelled \(0\)/i})).toBeInTheDocument()
+   // Decision item should not be counted
    expect(screen.getByText('Use queue')).toBeInTheDocument()
  })
 })
