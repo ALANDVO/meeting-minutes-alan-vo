@@ -4,7 +4,7 @@ Each round completes one feature or repair. Future items are planned, not implem
 
 ## Current round
 
-action-status-counts
+filter-visibility-and-capitalization
 
 ## Roadmap
 
@@ -32,6 +32,19 @@ Acceptance:
 - Count updates when actions are added/removed/transitioned
 - Count only includes action items, not decisions/questions
 - 'All actions' shows total action count
+
+Implementation: `frontend/src/MinutesPanel.tsx`
+
+Tests: `frontend/src/workflows.test.tsx`
+
+### filter-visibility-and-capitalization — Filter Bar Visibility and Status Capitalization
+
+Status: done
+
+Acceptance:
+- Filter bar only renders when meeting has at least one action item
+- Status badges and transition buttons show capitalized status labels (e.g., 'In Progress' instead of 'in progress')
+- Consistent capitalization with filter dropdown option labels
 
 Implementation: `frontend/src/MinutesPanel.tsx`
 

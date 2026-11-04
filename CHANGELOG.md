@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.3.0 — work-in-progress checkpoint
+
+Partial code published for continued development. Known issues: STATUS.md.
+
 ## 1.2.0 — work-in-progress checkpoint
 
 Partial code published for continued development. Known issues: STATUS.md.
@@ -29,3 +33,11 @@ Partial code published for continued development. Known issues: STATUS.md.
 - Add independent approval, immutable approved snapshots, transactional revisions and action status audit trails.
 - Add safe Markdown, JSON, CSV, Slack text and calendar exports, bounded persistence and optional grounded model suggestions.
 - Preserve the CLI commands with offline extraction and add backend, OIDC and frontend workflow tests plus a reproducible extraction diagnostic.
+
+## [1.2.0] - 2026-11-04
+
+## 1.2.0
+
+- Filter bar in Minutes Panel now only appears when the meeting has action items to filter.
+- Status labels in badges and transition buttons use consistent capitalization (e.g., "In Progress", "Blocked", "Done") matching filter dropdown options.
+- Added `useMemo` for action status counts to avoid recomputation on render.
