@@ -1,7 +1,6 @@
-
 {
   "schema_version": 1,
-  "current_feature": "action-status-counts",
+  "current_feature": "filter-visibility-and-capitalization",
   "features": [
     {
       "id": "action-status-filter",
@@ -26,6 +25,18 @@
         "Count updates when actions are added/removed/transitioned",
         "Count only includes action items, not decisions/questions",
         "'All actions' shows total action count"
+      ],
+      "implementation": ["frontend/src/MinutesPanel.tsx"],
+      "tests": ["frontend/src/workflows.test.tsx"]
+    },
+    {
+      "id": "filter-visibility-and-capitalization",
+      "title": "Filter Bar Visibility and Status Capitalization",
+      "status": "done",
+      "acceptance": [
+        "Filter bar only renders when meeting has at least one action item",
+        "Status badges and transition buttons show capitalized status labels (e.g., 'In Progress' instead of 'in progress')",
+        "Consistent capitalization with filter dropdown option labels"
       ],
       "implementation": ["frontend/src/MinutesPanel.tsx"],
       "tests": ["frontend/src/workflows.test.tsx"]

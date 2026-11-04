@@ -21,3 +21,13 @@ coverage/
 playwright-report/
 test-results/
 .portfolio-*
+.turbo/
+.env.local
+.env.*.local
+**/data/media/
+*.sqlite
+*.sqlite-wal
+*.sqlite-shm
+*.sqlite3
+*.sqlite3-wal
+*.sqlite3-shm

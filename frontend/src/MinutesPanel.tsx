@@ -1,32 +1,36 @@
-
-import {useState, useEffect} from 'react'
+import {useState, useEffect, useMemo} from 'react'
 import type {Meeting,Item,Mutation,User} from './types'
 import {ItemEditor} from './ItemEditor'
+
+function capitalizeStatus(status: string): string {
+  return status.split('_').map(s => s.charAt(0).toUpperCase() + s.slice(1)).join(' ')
+}
 
 export function MinutesPanel({meeting,mutate,busy,user,onSource}:{meeting:Meeting;mutate:Mutation;busy:boolean;user:User;onSource:(id:string)=>void}){
  const [editor,setEditor]=useState<Item|'new'|null>(null);const [note,setNote]=useState('');const [transition,setTransition]=useState<{item:Item;status:string}|null>(null)
  const [actionFilter,setActionFilter]=useState<'all'|'open'|'in_progress'|'blocked'|'done'|'cancelled'>('all')
  useEffect(()=>{setActionFilter('all')},[meeting.id])
  const canEdit=user.roles.some(r=>['admin','reviewer'].includes(r));const draft=meeting.status==='draft';const independent=!meeting.contributors.includes(user.subject)
- const actionStatusCounts = {
+ const actionStatusCounts = useMemo(() => ({
    all: meeting.items.filter(i => i.kind === 'action').length,
    open: meeting.items.filter(i => i.kind === 'action' && i.status === 'open').length,
    in_progress: meeting.items.filter(i => i.kind === 'action' && i.status === 'in_progress').length,
    blocked: meeting.items.filter(i => i.kind === 'action' && i.status === 'blocked').length,
    done: meeting.items.filter(i => i.kind === 'action' && i.status === 'done').length,
    cancelled: meeting.items.filter(i => i.kind === 'action' && i.status === 'cancelled').length,
- }
+ }), [meeting.items])
+ const hasActions = actionStatusCounts.all > 0
  async function review(decision:string){if(await mutate('/review',{decision,note}))setNote('')}
  return <>
  <section className="panel"><div className="section-heading"><div><p className="eyebrow">REVIEWED CONTENT</p><h2>Minutes & actions</h2></div><button className="secondary" disabled={!canEdit||!draft||busy} onClick={()=>setEditor('new')}>Add sourced item</button></div>
  {!meeting.items.length&&<p className="empty">Adopt a proposal or add an item with a source citation to begin.</p>}
- {meeting.items.filter(item=>item.kind!=='action' || actionFilter==='all' || item.status===actionFilter).map(item=><article className="minute-item" key={item.id}><div className="section-heading"><span className="badge">{item.kind} · {item.status.replaceAll('_',' ')}</span><div className="actions"><button className="text-button" disabled={!canEdit||!draft||busy} onClick={()=>setEditor(item)}>Edit</button><button className="text-button danger" disabled={!canEdit||!draft||busy} onClick={()=>{if(confirm('Remove this item from the draft? The audit event remains.'))void mutate('/items/'+item.id,{},'DELETE')}}>Remove</button></div></div><h3>{item.text}</h3>
+ {meeting.items.filter(item=>item.kind!=='action' || actionFilter==='all' || item.status===actionFilter).map(item=><article className="minute-item" key={item.id}><div className="section-heading"><span className="badge">{item.kind} · {capitalizeStatus(item.status)}</span><div className="actions"><button className="text-button" disabled={!canEdit||!draft||busy} onClick={()=>setEditor(item)}>Edit</button><button className="text-button danger" disabled={!canEdit||!draft||busy} onClick={()=>{if(confirm('Remove this item from the draft? The audit event remains.'))void mutate('/items/'+item.id,{},'DELETE')}}>Remove</button></div></div><h3>{item.text}</h3>
  {item.kind==='action'&&<p>Owner: <strong>{item.owner??'Unassigned'}</strong> · Due: {item.due_date??'Unconfirmed'}</p>}
  {item.evidence.map((ref,n)=><blockquote key={n}><p>{ref.quote}</p><button className="text-button" onClick={()=>onSource(ref.turn_id)}>{ref.turn_id} · line {ref.line} · {ref.speaker??'Unattributed'}</button></blockquote>)}
  {item.note&&<p className="muted">{item.note}</p>}
- {item.kind==='action'&&meeting.status==='approved'&&canEdit&&<div className="actions">{(item.status==='done'||item.status==='cancelled'?['open']:['in_progress','blocked','done','cancelled'].filter(s=>s!==item.status)).map(s=><button key={s} className="secondary" disabled={busy} onClick={()=>{setTransition({item,status:s});setNote('')}}>{s.replaceAll('_',' ')}</button>)}</div>}
+ {item.kind==='action'&&meeting.status==='approved'&&canEdit&&<div className="actions">{(item.status==='done'||item.status==='cancelled'?['open']:['in_progress','blocked','done','cancelled'].filter(s=>s!==item.status)).map(s=><button key={s} className="secondary" disabled={busy} onClick={()=>{setTransition({item,status:s});setNote('')}}>{capitalizeStatus(s)}</button>)}</div>}
  </article>)}
- <div className="filter-bar" role="group" aria-label="Filter actions by status"><label htmlFor="action-filter" className="visually-hidden">Filter actions by status</label><select id="action-filter" value={actionFilter} onChange={e=>setActionFilter(e.target.value as typeof actionFilter)} disabled={busy}><option value="all">All actions ({actionStatusCounts.all})</option><option value="open">Open ({actionStatusCounts.open})</option><option value="in_progress">In progress ({actionStatusCounts.in_progress})</option><option value="blocked">Blocked ({actionStatusCounts.blocked})</option><option value="done">Done ({actionStatusCounts.done})</option><option value="cancelled">Cancelled ({actionStatusCounts.cancelled})</option></select></div>
+ {hasActions && <div className="filter-bar" role="group" aria-label="Filter actions by status"><label htmlFor="action-filter" className="visually-hidden">Filter actions by status</label><select id="action-filter" value={actionFilter} onChange={e=>setActionFilter(e.target.value as typeof actionFilter)} disabled={busy}><option value="all">All actions ({actionStatusCounts.all})</option><option value="open">Open ({actionStatusCounts.open})</option><option value="in_progress">In progress ({actionStatusCounts.in_progress})</option><option value="blocked">Blocked ({actionStatusCounts.blocked})</option><option value="done">Done ({actionStatusCounts.done})</option><option value="cancelled">Cancelled ({actionStatusCounts.cancelled})</option></select></div>}
  </section>
  {editor&&<ItemEditor key={editor==='new'?'new':editor.id} meeting={meeting} item={editor==='new'?undefined:editor} mutate={mutate} onClose={()=>setEditor(null)} busy={busy}/>}
  <section className="panel"><p className="eyebrow">APPROVAL GATE</p><h2>Confirm the record</h2>{meeting.review_findings?.map((f,n)=><p className="warning" key={n}>{f.message}</p>)}
@@ -36,6 +40,6 @@ export function MinutesPanel({meeting,mutate,busy,user,onSource}:{meeting:Meetin
  {meeting.status==='approved'&&<p>Approved by <strong>{meeting.approval?.actor}</strong> at revision {meeting.approval?.revision}. Subsequent action-status changes do not alter that approved snapshot.</p>}
  {!draft&&<div className="reopen"><label>Reason to reopen as a draft<input value={note} onChange={e=>setNote(e.target.value)} maxLength={1000}/></label><button className="secondary" disabled={!canEdit||busy||!note.trim()} onClick={()=>void mutate('/reopen',{reason:note})}>Reopen draft</button></div>}
  </section>
- {transition&&<section className="panel editor"><h2>Mark action {transition.status.replaceAll('_',' ')}</h2><p>{transition.item.text}</p><label>Reason / completion evidence<textarea value={note} onChange={e=>setNote(e.target.value)} maxLength={1000}/></label><div className="actions"><button disabled={busy||!note.trim()} onClick={async()=>{try{if(await mutate('/items/'+transition.item.id+'/transition',{status:transition.status,reason:note})){setTransition(null);setNote('')}}catch{/* Keep the form available to correct the error. */}}}>Confirm status change</button><button className="secondary" onClick={()=>setTransition(null)}>Cancel</button></div></section>}
+ {transition&&<section className="panel editor"><h2>Mark action {capitalizeStatus(transition.status)}</h2><p>{transition.item.text}</p><label>Reason / completion evidence<textarea value={note} onChange={e=>setNote(e.target.value)} maxLength={1000}/></label><div className="actions"><button disabled={busy||!note.trim()} onClick={async()=>{try{if(await mutate('/items/'+transition.item.id+'/transition',{status:transition.status,reason:note})){setTransition(null);setNote('')}}catch{/* Keep the form available to correct the error. */}}}>Confirm status change</button><button className="secondary" onClick={()=>setTransition(null)}>Cancel</button></div></section>}
  </>
 }
