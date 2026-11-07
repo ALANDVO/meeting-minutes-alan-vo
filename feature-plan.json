@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "current_feature": "filter-visibility-and-capitalization",
+  "current_feature": "status-capitalization-consistency",
   "features": [
     {
       "id": "action-status-filter",
@@ -39,6 +39,18 @@
         "Consistent capitalization with filter dropdown option labels"
       ],
       "implementation": ["frontend/src/MinutesPanel.tsx"],
+      "tests": ["frontend/src/workflows.test.tsx"]
+    },
+    {
+      "id": "status-capitalization-consistency",
+      "title": "Status Capitalization Consistency Across Components",
+      "status": "done",
+      "acceptance": [
+        "Filter dropdown in Minutes Panel shows properly capitalized status labels (e.g., 'In Progress' instead of 'In progress')",
+        "Item Editor status selector shows properly capitalized status labels matching badge display",
+        "Consistent capitalization across all components using shared capitalizeStatus function"
+      ],
+      "implementation": ["frontend/src/MinutesPanel.tsx", "frontend/src/ItemEditor.tsx"],
       "tests": ["frontend/src/workflows.test.tsx"]
     }
   ]

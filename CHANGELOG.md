@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.4.0 — work-in-progress checkpoint
+
+Partial code published for continued development. Known issues: STATUS.md.
+
 ## 1.3.0 — work-in-progress checkpoint
 
 Partial code published for continued development. Known issues: STATUS.md.
@@ -41,3 +45,10 @@ Partial code published for continued development. Known issues: STATUS.md.
 - Filter bar in Minutes Panel now only appears when the meeting has action items to filter.
 - Status labels in badges and transition buttons use consistent capitalization (e.g., "In Progress", "Blocked", "Done") matching filter dropdown options.
 - Added `useMemo` for action status counts to avoid recomputation on render.
+
+## [1.3.0] - 2026-11-07
+
+## 1.3.0
+
+- Fix status label capitalization consistency: filter dropdown in Minutes Panel and status selector in Item Editor now use "In Progress", "Blocked", "Done" format matching badge display.
+- Added `capitalizeStatus` utility to Item Editor for consistent status display across all components.
