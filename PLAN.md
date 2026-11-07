@@ -63,3 +63,6 @@ Implementation: `frontend/src/MinutesPanel.tsx`, `frontend/src/ItemEditor.tsx`
 
 Tests: `frontend/src/workflows.test.tsx`
 
+---
+
+Alan Vo · [alanvo.net](https://alanvo.net)

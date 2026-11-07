@@ -52,3 +52,7 @@ Partial code published for continued development. Known issues: STATUS.md.
 
 - Fix status label capitalization consistency: filter dropdown in Minutes Panel and status selector in Item Editor now use "In Progress", "Blocked", "Done" format matching badge display.
 - Added `capitalizeStatus` utility to Item Editor for consistent status display across all components.
+
+---
+
+Alan Vo · [alanvo.net](https://alanvo.net)

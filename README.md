@@ -176,3 +176,7 @@ Tests cover exact normalized source offsets, citation rejection, deadline ambigu
 Back up SQLite with its backup API or stop the backend before copying the volume; do not copy only the live `.db` while ignoring WAL files. Keep backups encrypted and restrict volume access. Health checks report process availability, not IdP/model availability. Model failures do not block offline extraction or saved records. This workspace has no email delivery, audio transcription, calendar integration, scheduled reminders, speaker diarization or multi-tenant isolation.
 
 MIT license. Maintained by **[Alan Vo](https://github.com/ALANDVO)** — **alanvo@gmail.com**.
+
+---
+
+Alan Vo · [alanvo.net](https://alanvo.net)
