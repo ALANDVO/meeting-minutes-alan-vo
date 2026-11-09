@@ -51,7 +51,7 @@ describe('review workflows',()=>{
    // Check that option text includes counts
    expect(screen.getByRole('option',{name:/All actions \(3\)/i})).toBeInTheDocument()
    expect(screen.getByRole('option',{name:/Open \(1\)/i})).toBeInTheDocument()
-   expect(screen.getByRole('option',{name:/In progress \(1\)/i})).toBeInTheDocument()
+  expect(screen.getByRole('option',{name:/In Progress \(1\)/i})).toBeInTheDocument()
    expect(screen.getByRole('option',{name:/Done \(1\)/i})).toBeInTheDocument()
    expect(screen.getByRole('option',{name:/Blocked \(0\)/i})).toBeInTheDocument()
    expect(screen.getByRole('option',{name:/Cancelled \(0\)/i})).toBeInTheDocument()
