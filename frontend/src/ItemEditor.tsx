@@ -2,7 +2,7 @@ import {useState} from 'react'
 import type {Meeting,Item,Mutation} from './types'
 
 function capitalizeStatus(status: string): string {
-  return status.split('_').map(s => s.charAt(0).toUpperCase() + s.slice(1)).join(' ')
+  return status.replace(/_/g, ' ').split(' ').map(s => s.charAt(0).toUpperCase() + s.slice(1)).join(' ')
 }
 
 export function ItemEditor({meeting,item,mutate,onClose,busy}:{meeting:Meeting;item?:Item;mutate:Mutation;onClose:()=>void;busy:boolean}){

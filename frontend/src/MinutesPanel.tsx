@@ -3,7 +3,7 @@ import type {Meeting,Item,Mutation,User} from './types'
 import {ItemEditor} from './ItemEditor'
 
 function capitalizeStatus(status: string): string {
-  return status.split('_').map(s => s.charAt(0).toUpperCase() + s.slice(1)).join(' ')
+  return status.replace(/_/g, ' ').split(' ').map(s => s.charAt(0).toUpperCase() + s.slice(1)).join(' ')
 }
 
 export function MinutesPanel({meeting,mutate,busy,user,onSource}:{meeting:Meeting;mutate:Mutation;busy:boolean;user:User;onSource:(id:string)=>void}){
