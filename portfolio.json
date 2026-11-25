@@ -3,7 +3,7 @@
   "owner": "ALANDVO",
   "author": "Alan Vo",
   "email": "alanvo@gmail.com",
-  "version": "1.7.0",
+  "version": "1.8.0",
   "domain": "nlp",
   "workflows": [
     "Import and inspect source-linked meeting proposals",
